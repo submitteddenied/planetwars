@@ -112,9 +112,8 @@ def do_game(game_id, logger, p1, p2, pw, show_gui=False, max_game_length=500):
     else:
         paused = False
         
-    
-    p1Proxy = pw.MakeProxy("1")
-    p2Proxy = pw.MakeProxy("2")
+    p1Proxy = pw.MakeProxy("1", logger.p1log)
+    p2Proxy = pw.MakeProxy("2", logger.p2log)
     fps = 4
     #min_100_ships = lambda p, pw: 100
     #p1 = VariableAggressionPlayer(0.2, min_100_ships)
@@ -189,7 +188,7 @@ def do_game(game_id, logger, p1, p2, pw, show_gui=False, max_game_length=500):
         #p2 wins!
         winner = "%s victory" % p2Proxy.PlayerID()
     
-    logger.info("Game {0}: {1} at turn {2} - {3}: {4}, {5}: {6}".format(
+    logger.result("Game {0}: {1} at turn {2} - {3}: {4}, {5}: {6}".format(
                     game_id,
                     winner,
                     pw.CurrentTick(),
@@ -199,7 +198,7 @@ def do_game(game_id, logger, p1, p2, pw, show_gui=False, max_game_length=500):
                     p2Proxy.TotalShips()))
     
 
-import logging
+from Logger import Logger
 
 if __name__ == '__main__':
     try:
@@ -210,9 +209,9 @@ if __name__ == '__main__':
     try:
         bot1 = VariableAggressionPlayer(0.3)
         bot2 = VariableAggressionPlayer(0.5)
-        logging.basicConfig(file=sys.stdout, level=logging.DEBUG)
-        log = logging.getLogger(__name__) #will be "__main__"
-        pw = PlanetWars(open(sys.argv[1]).read())
+        log = Logger('./%s.log')
+        pw = PlanetWars(open(sys.argv[1]).read(), logger=log.turn)
         do_game(1, log, bot1, bot2, pw, show_gui=True)
+        log.flush()
     except KeyboardInterrupt:
         print 'ctrl-c, leaving ...'

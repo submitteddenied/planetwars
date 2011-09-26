@@ -8,7 +8,7 @@ class PlanetWars(PlanetWarsProxy):
         if not logger == None:
             self.logger = logger
         else:
-            self.logger = logging.getLogger("pw")
+            self.logger = logging.getLogger("pw").debug
         
     def Tick(self):
         #phase 1, departure is handled by IssueOrder
@@ -60,15 +60,15 @@ class PlanetWars(PlanetWarsProxy):
             
             if(max == second):
                 #p.Owner() stays the same
-                self.logger.debug("{0:4d}: Player {1} defended planet {2}".format(
+                self.logger("{0:4d}: Player {1} defended planet {2}".format(
                             self._tick, owner, p.ID()))
             else:
                 if(p.Owner() == owner):
-                    self.logger.debug("{0:4d}: Player {1} defended planet {2}".format(
+                    self.logger("{0:4d}: Player {1} defended planet {2}".format(
                             self._tick, owner, p.ID()))
                 else:
                     p.Owner(owner)
-                    self.logger.debug("{0:4d}: Player {1} now owns planet {2}".format(
+                    self.logger("{0:4d}: Player {1} now owns planet {2}".format(
                                 self._tick, owner, p.ID()))
                 p.NumShips(max - second)
                 
@@ -125,10 +125,15 @@ class PlanetWars(PlanetWarsProxy):
             return True
         return False
     
-    def MakeProxy(self, player_id):
+    def MakeProxy(self, player_id, logger=None):
         result = PlanetWarsProxy()
         result._extent = self._extent
         result._Update(self, player_id, True)
+        if logger:
+            result.log = logger
+        else:
+            #dummy log function
+            result.log = lambda m: None
         return result
     
     def ProcessOrders(self, player_id, orders):
@@ -141,7 +146,7 @@ class PlanetWars(PlanetWarsProxy):
             dest = self.GetPlanet(order[4])
             numships = order[3]
             fleet = Fleet(new_id, player_id, numships, source.X(), source.Y(), dest)
-            self.logger.debug("{0:4d}: Player {1} launched {2} (of {3}) ships from planet {4} to planet {5}".format(
+            self.logger("{0:4d}: Player {1} launched {2} (of {3}) ships from planet {4} to planet {5}".format(
                             self._tick, player_id, numships, source.NumShips(), source.ID(), dest.ID()))
             self._fleets[new_id] = fleet
             source.RemoveShips(numships)
