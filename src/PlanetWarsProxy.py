@@ -243,11 +243,17 @@ class PlanetWarsProxy(object):
             
         for planet in planetsinview.values():
             self._planets[planet.ID()] = planet.Copy()
+            self._planets[planet.ID()].VisionAge(0)
+        
+        for id, planet in self._planets.items():
+            if not planetsinview.has_key(id):
+                planet.VisionAge(planet.VisionAge() + 1)
             
         #clear out the fleet list, if they aren't in view they disappear
         self._fleets = {}
         for fleet in fleetsinview.values():
             self._fleets[fleet.ID()] = fleet.Copy()
+            self._fleets[fleet.ID()].VisionAge(0)
             
     def _EndGame(self, winnerid):
         self._winner = winnerid

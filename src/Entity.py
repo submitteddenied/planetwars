@@ -17,6 +17,7 @@ class Entity(object):
         self._id = id
         self._numships = numships
         self._owner = owner_id
+        self._vision_age = 99999
     
     def Location(self):
         return self._location
@@ -60,6 +61,15 @@ class Entity(object):
     
     def Tick(self):
         raise NotImplementedError("This method cannot be called on this 'abstract' class")
+    
+    def IsInVision(self):
+        return self.VisionAge() == 0
+    
+    def VisionAge(self, age=None):
+        if age != None:
+            self._vision_age = age
+        
+        return self._vision_age
     
     def GetInRange(self, list):
         '''Returns a map of entities that are within vision range of this entity.

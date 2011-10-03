@@ -58,7 +58,9 @@ def histogram(data, labels):
 
   fig = plt.figure()
   ax = fig.add_subplot(111)
-
+  plt.xlim(0, 500)
+  plt.ylim(0, 0.02)
+  
   # the histogram of the data
   n, bins, patches = ax.hist(data, 50, normed=1, facecolor='green', alpha=0.75)
 
@@ -88,7 +90,7 @@ def histogram_all(data_map, filename_format, labels=('Game length', 'Number of g
     map_times[id] = []
     for datum in map_data:
       map_times[id].append(datum['time'])
-    
+      
   for id, times in map_times.items():
     plot = histogram(times, labels)
     plot.savefig(filename_format % id)
@@ -123,7 +125,7 @@ def matchup_pyplot(matchups):
   
 if __name__ == '__main__':
   #let's make some data!
-  data, match = make_data(argv[1])
+  data, match = make_data(sys.argv[1])
   
   plt.savefig(sys.argv[2])
   

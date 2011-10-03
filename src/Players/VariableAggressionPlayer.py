@@ -65,7 +65,12 @@ class VariableAggressionPlayer(BasePlayer):
             else:
                 i += 1
         
+    def do_hello(self, pw):
+        pw.log("Hello world! I am %s" % self)
+        
     def DoTurn(self, pw):
+        if pw.CurrentTick() == 0:
+            self.do_hello(pw)
         self.attacking = pw.NotMyPlanets()
         for planet in pw.MyPlanets():
             self.do_planet_turn(planet, pw)
