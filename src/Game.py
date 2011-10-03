@@ -5,13 +5,11 @@ Created on 23/03/2011
 '''
 import sys
 import pygame
-from pygame.locals import *
 
-from Players import *
+from pygame.locals import * #@UnusedWildImport
+
+#from Players import *
 from PlanetWars import PlanetWars
-from PlanetWarsProxy import PlanetWarsProxy
-from Players.ScoutPlayer import ScoutPlayer
-from Players.VariableAggressionPlayer import VariableAggressionPlayer
 
 GAME_SIZE = (500,500)
 SCREEN_SIZE = (3*GAME_SIZE[0], GAME_SIZE[1])
@@ -201,17 +199,22 @@ def do_game(game_id, logger, p1, p2, pw, show_gui=False, max_game_length=500):
 from Logger import Logger
 
 if __name__ == '__main__':
+    log = Logger('./%s.log')
     try:
         import psyco
         psyco.full()
     except ImportError:
         pass
     try:
-        bot1 = VariableAggressionPlayer(0.3)
-        bot2 = VariableAggressionPlayer(0.5)
-        log = Logger('./%s.log')
+        #import the two players
+        from Players.TemplatePlayer import TemplatePlayer
+        from Players.BasicPlayer import BasicPlayer
+        bot1 = TemplatePlayer() #your player!
+        bot2 = BasicPlayer()
+        
         pw = PlanetWars(open(sys.argv[1]).read(), logger=log.turn)
         do_game(1, log, bot1, bot2, pw, show_gui=True)
-        log.flush()
     except KeyboardInterrupt:
         print 'ctrl-c, leaving ...'
+    finally:
+        log.flush()
