@@ -45,6 +45,7 @@ class Fleet(Entity):
     
     def Tick(self):
         self._turns_remaining -= 1
+        self._location = Location(self.X(), self.Y())
     
     def X(self):
         source = self.Source()
