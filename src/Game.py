@@ -102,10 +102,15 @@ def do_game(game_id, logger, p1, p2, pw, show_gui=False, max_game_length=500):
     
     if show_gui:
         pygame.init()
-        screen = pygame.display.set_mode(SCREEN_SIZE, 0 ,32)
+        view = 'world'
+        if view == 'all':
+            window_size = SCREEN_SIZE
+        else:
+            window_size = GAME_SIZE
+        
+        screen = pygame.display.set_mode(window_size, 0 ,32)
         background = pygame.image.load("space.jpg").convert_alpha()
         clock = pygame.time.Clock()
-        view = 'all'
         paused = True
     else:
         paused = False
