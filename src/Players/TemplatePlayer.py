@@ -35,4 +35,5 @@ class TemplatePlayer(BasePlayer):
     def DoTurn(self, pw):
         for planet in pw.MyPlanets():
             if planet.NumShips() > self.MINIMUM_SHIPS:
-                pw.IssueOrder(planet, self.pick_target(pw, planet), planet.NumShips() -1)
+                target = self.pick_target(pw, planet)
+                pw.IssueOrder(planet, target, target.NumShips())
