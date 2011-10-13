@@ -60,6 +60,7 @@ class PlanetWars(PlanetWarsProxy):
             
             if(max == second):
                 #p.Owner() stays the same
+                
                 self.logger("{0:4d}: Player {1} defended planet {2}".format(
                             self._tick, owner, p.ID()))
             else:
@@ -70,8 +71,8 @@ class PlanetWars(PlanetWarsProxy):
                     p.Owner(owner)
                     self.logger("{0:4d}: Player {1} now owns planet {2}".format(
                                 self._tick, owner, p.ID()))
-                p.NumShips(max - second)
-                
+            p.NumShips(max - second)
+            
         self._tick += 1
     
     def MyPlanets(self, player_id):

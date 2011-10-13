@@ -171,6 +171,8 @@ class PlanetWarsProxy(object):
     def IssueOrder(self, source, destination_planet, num_ships):
         #is source a fleet or planet?
         num_ships = int(num_ships)
+        if num_ships <= 0:
+            raise ValueError("You must send 1 or more ships!")
         if(type(destination_planet) == Planet):
             dest = destination_planet
         else:
