@@ -186,18 +186,18 @@ def do_game(game_id, logger, p1, p2, pw, show_gui=False, max_game_length=500):
         winner = "tie"
     elif p1Proxy.TotalShips() > p2Proxy.TotalShips():
         #p1 wins!
-        winner = "%s victory" % p1Proxy.PlayerID()
+        winner = "%s victory" % p1.id
     else:
         #p2 wins!
-        winner = "%s victory" % p2Proxy.PlayerID()
+        winner = "%s victory" % p2.id
     
     logger.result("Game {0}: {1} at turn {2} - {3}: {4}, {5}: {6}".format(
                     game_id,
                     winner,
                     pw.CurrentTick(),
-                    p1Proxy.PlayerID(),
+                    p1.id,
                     p1Proxy.TotalShips(),
-                    p2Proxy.PlayerID(),
+                    p2.id,
                     p2Proxy.TotalShips()))
     
 

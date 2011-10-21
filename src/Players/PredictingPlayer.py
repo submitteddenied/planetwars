@@ -17,8 +17,8 @@ class PredictingPlayer(BasePlayer):
     MIN_SHIPS = 25
     
     
-    def __init__(self, scout_enabled=True):
-        super(PredictingPlayer, self).__init__()
+    def __init__(self, id=None, scout_enabled=True):
+        super(PredictingPlayer, self).__init__(id)
         self.model = self.Model({}, {})
         self.scout = None
         self.attacks = {}
