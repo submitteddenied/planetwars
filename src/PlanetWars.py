@@ -65,7 +65,11 @@ class PlanetWars(PlanetWarsProxy):
                             self._tick, owner, p.ID()))
             else:
                 if(p.Owner() == owner):
-                    self.logger("{0:4d}: Player {1} defended planet {2}".format(
+                    if len(forces) == 1:
+                        self.logger("{0:4d}: Player {1} reinforced planet {2}".format(
+                            self._tick, owner, p.ID()))
+                    else:
+                        self.logger("{0:4d}: Player {1} defended planet {2}".format(
                             self._tick, owner, p.ID()))
                 else:
                     p.Owner(owner)

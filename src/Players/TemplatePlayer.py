@@ -10,6 +10,7 @@ class TemplatePlayer(BasePlayer):
     Describe your bot here!
     '''
     MINIMUM_SHIPS = 75
+    CAP_EXTRA = 0
     
     def __init__(self):
         '''
@@ -36,4 +37,5 @@ class TemplatePlayer(BasePlayer):
         for planet in pw.MyPlanets():
             if planet.NumShips() > self.MINIMUM_SHIPS:
                 target = self.pick_target(pw, planet)
-                pw.IssueOrder(planet, target, target.NumShips())
+                if target.NumShips() > 0:
+                    pw.IssueOrder(planet, target, target.NumShips() + self.CAP_EXTRA)

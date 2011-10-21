@@ -5,13 +5,26 @@ Created on 15/09/2011
 '''
 
 import Game
-import logging
+from Logger import Logger
 from Players import *
+import logging
 from PlanetWars import PlanetWars
 from PlanetWarsProxy import PlanetWarsProxy
 
 def parse_config(config_file):
     pass
+
+def batch_challenge(subjects, bots, maps, log_path):
+    game_id = 1
+    log = Logger(log_path)
+    for m in range(len(maps)):
+        map_id = PlanetWarsProxy(maps[m])._gameid
+        for i in range(len(subjects)):
+            for j in range(len(bots)):
+                log.result("Starting game %d, %s vs %s on map %d" % (game_id, subjects[i], bots[j], map_id))
+                Game.do_game(game_id, log, subjects[i], bots[j], PlanetWars(maps[m]))
+                game_id += 1
+                log.flush()
 
 def batch_run(bots, maps):
     game_id = 1

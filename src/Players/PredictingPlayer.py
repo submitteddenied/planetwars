@@ -17,13 +17,17 @@ class PredictingPlayer(BasePlayer):
     MIN_SHIPS = 25
     
     
-    def __init__(self):
+    def __init__(self, scout_enabled=True):
         super(PredictingPlayer, self).__init__()
         self.model = self.Model({}, {})
         self.scout = None
         self.attacks = {}
         self.plans = deque()
         self._plan_id = 0
+        self.scout_enabled = scout_enabled
+        
+    def __str__(self):
+        return "<PredictingPlayer id=%s scouting=%s>" % (self.id, self.scout_enabled)
     
     def plan_id(self):
         self._plan_id += 1
@@ -231,11 +235,12 @@ class PredictingPlayer(BasePlayer):
         self.update_model(pw)
         
         #do some scouting
-        if self.scout == None or pw.GetFleet(self.scout) == None:
-            self.send_scout(pw)
-        else:
-            self.update_scout(pw)
-            
+        if self.scout_enabled:
+            if self.scout == None or pw.GetFleet(self.scout) == None:
+                self.send_scout(pw)
+            else:
+                self.update_scout(pw)
+        
         
         #launch an attack
         self.send_attack(pw)

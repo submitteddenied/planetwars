@@ -212,9 +212,9 @@ if __name__ == '__main__':
         pass
     try:
         #import the two players
-        from Players.TemplatePlayer import TemplatePlayer
+        from Players.Dave2Player import Dave2Player
         from Players.BasicPlayer import BasicPlayer
-        bot1 = TemplatePlayer() #your player!
+        bot1 = Dave2Player() #your player!
         bot2 = BasicPlayer()
         
         pw = PlanetWars(open(sys.argv[1]).read(), logger=log.turn)

@@ -7,9 +7,7 @@ Created on 19/09/2011
 import sys
 import re
 
-import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.mlab as mlab
 
 def make_data(file_name):
     infile = file(file_name, 'r')
@@ -56,77 +54,77 @@ def make_data(file_name):
 
 def histogram(data, labels):
 
-  fig = plt.figure()
-  ax = fig.add_subplot(111)
-  plt.xlim(0, 500)
-  plt.ylim(0, 0.02)
-  
-  # the histogram of the data
-  n, bins, patches = ax.hist(data, 50, normed=1, facecolor='green', alpha=0.75)
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    plt.xlim(0, 500)
+    plt.ylim(0, 0.02)
+    
+    # the histogram of the data
+    n, bins, patches = ax.hist(data, 50, normed=1, facecolor='green', alpha=0.75)
 
-  # hist uses np.histogram under the hood to create 'n' and 'bins'.
-  # np.histogram returns the bin edges, so there will be 50 probability
-  # density values in n, 51 bin edges in bins and 50 patches.  To get
-  # everything lined up, we'll compute the bin centers
-  bincenters = 0.5 * (bins[1:] + bins[:-1])
+    # hist uses np.histogram under the hood to create 'n' and 'bins'.
+    # np.histogram returns the bin edges, so there will be 50 probability
+    # density values in n, 51 bin edges in bins and 50 patches. To get
+    # everything lined up, we'll compute the bin centers
+    bincenters = 0.5 * (bins[1:] + bins[:-1])
 
-  ax.set_xlabel(labels[0])
-  ax.set_ylabel(labels[1])
-  ax.grid(True)
-  
-  #probably save this?
-  return plt
-  
+    ax.set_xlabel(labels[0])
+    ax.set_ylabel(labels[1])
+    ax.grid(True)
+    
+    #probably save this?
+    return plt
+    
 def histogram_all(data_map, filename_format, labels=('Game length', 'Number of games')):
-  '''
-  Takes the data per map as output by make_data and saves a histogram of game
-  lengths for each map by calling histogram.
-  The filename_format string must contain exactly one %s token to be replaced by
-  the map id when saving the file.
-  eg: ../experiments/config-4/figures/map%s length.pdf
-  '''
-  map_times = {}
-  for id, map_data in data_map.items():
-    map_times[id] = []
-    for datum in map_data:
-      map_times[id].append(datum['time'])
-      
-  for id, times in map_times.items():
-    plot = histogram(times, labels)
-    plot.savefig(filename_format % id)
-  
+    '''
+    Takes the data per map as output by make_data and saves a histogram of game
+    lengths for each map by calling histogram.
+    The filename_format string must contain exactly one %s token to be replaced by
+    the map id when saving the file.
+    eg: ../experiments/config-4/figures/map%s length.pdf
+    '''
+    map_times = {}
+    for id, map_data in data_map.items():
+        map_times[id] = []
+        for datum in map_data:
+            map_times[id].append(datum['time'])
+            
+    for id, times in map_times.items():
+        plot = histogram(times, labels)
+        plot.savefig(filename_format % id)
+    
 def matchup_pyplot(matchups):
-  data = []
-  for i in range(len(matchups)):
-    r = []
-    for j in range(i + 1, len(matchups) + 1):
-      val = matchups[i + 1][j + 1]
-      r.append(val)
-      #instead of the score, append the color!
-      #red = 127 * val / 10.0 + 127
-      #blue = 127 * -val / 10.0 + 127
-      #r.append(red/255.0, 0, blue/255.0, 1)
-    while len(r) < 50:
-      #r.append([0,0,0,0]) #completely transparent point
-      r.append(0)
-    data.append(r)
-  
-  #now, plot data using imshow!
-  fig = plt.figure()
-  ax = fig.add_subplot(111)
-  cax = ax.imshow(data)
-  ax.set_title('Win/loss over 10 matches')
-  
-  cbar = fig.colorbar(cax, ticks=[-10, 0, 10])
-  #cbar.ax.set_yticklabels(['10 losses', '5 wins, 5 losses', '10 wins'])
-  #plt.savefig(filename)
-  return plt
-  
-  
+    data = []
+    for i in range(len(matchups)):
+        r = []
+        for j in range(i + 1, len(matchups) + 1):
+            val = matchups[i + 1][j + 1]
+            r.append(val)
+            #instead of the score, append the color!
+            #red = 127 * val / 10.0 + 127
+            #blue = 127 * -val / 10.0 + 127
+            #r.append(red/255.0, 0, blue/255.0, 1)
+        while len(r) < 50:
+            #r.append([0,0,0,0]) #completely transparent point
+            r.append(0)
+        data.append(r)
+    
+    #now, plot data using imshow!
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    cax = ax.imshow(data)
+    ax.set_title('Win/loss over 10 matches')
+    
+    cbar = fig.colorbar(cax, ticks=[-10, 0, 10])
+    #cbar.ax.set_yticklabels(['10 losses', '5 wins, 5 losses', '10 wins'])
+    #plt.savefig(filename)
+    return plt
+    
+    
 if __name__ == '__main__':
-  #let's make some data!
-  data, match = make_data(sys.argv[1])
-  
-  plt.savefig(sys.argv[2])
-  
+    #let's make some data!
+    data, match = make_data(sys.argv[1])
+    
+    plt.savefig(sys.argv[2])
+    
 
