@@ -9,11 +9,46 @@ import re
 
 import matplotlib.pyplot as plt
 
+def parse_matchups(file_name):
+    infile = file(file_name, 'r')
+    line = infile.readline()
+    
+    data_by_map = {}
+    matchups = {}
+    
+    while line != '':
+        parts = line.split(':')
+        game_id = parts[0]
+        map = parts[1]
+        winner = parts[2]
+        game_length = parts[3]
+        p1id, p1score = parts[4].split(',')
+        p2id, p2score = parts[5].split(',')
+        data = {'bots': (p1id, p2id), p1id: p1score, p2id: p2score, 'winner': winner, 'time': game_length}
+        if not data_by_map.has_key(map):
+            data_by_map[map] = []
+        data_by_map[map].append(data)
+        lower = min(int(p1id), int(p2id))
+        higher = max(int(p1id), int(p2id))
+        
+        if not matchups.has_key(lower):
+            matchups[lower] = {}
+        if not matchups[lower].has_key(higher):
+            matchups[lower][higher] = 0
+        
+        if data['winner'] == str(lower):
+            matchups[lower][higher] += 1
+        else:
+            matchups[lower][higher] -= 1
+            
+        line = infile.readline()
+    return (data_by_map, matchups)
+
 def make_data(file_name):
     infile = file(file_name, 'r')
     
     idreg = "id=([0-9]+).*id=([0-9]+).*map ([0-9]+)"
-    victoryreg = "([12]) victory at turn ([0-9]+) - 1: ([0-9]+), 2: ([0-9]+)"
+    victoryreg = "([0-9]+) victory at turn ([0-9]+) - [0-9]+: ([0-9]+), [0-9]+: ([0-9]+)"
     line = infile.readline()
     data_by_map = {}
     matchups = {}
@@ -120,6 +155,16 @@ def matchup_pyplot(matchups):
     #plt.savefig(filename)
     return plt
     
+def invert_matchups(matchups):
+    result = {}
+    
+    for subject, scores in matchups.items():
+        for other, score in scores.items():
+            if not result.has_key(other):
+                result[other] = {}
+            result[other][subject] = -score
+    
+    return result
     
 if __name__ == '__main__':
     #let's make some data!

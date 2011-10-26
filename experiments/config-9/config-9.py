@@ -6,12 +6,11 @@ sys.path.append('C:\\Documents and Settings\\mjensen\\Dropbox\\Projects\\Python 
 import Batch
 import logging
 from Players.VariableAggressionPlayer import VariableAggressionPlayer
-from Players.PredictingPlayer import PredictingPlayer
+from Players.Dave2Player import Dave2Player
 from PlanetWarsProxy import PlanetWarsProxy
 import optparse
 
-DESC = """Plays 50 VariableAggressionPlayers against two predicting players, one with scout on and one without.
-Plays on all 100 maps."""
+DESC = """Plays 50 VariableAggressionPlayers against Dave's bot on all 100 maps."""
 
 if __name__ == "__main__":
     parser = optparse.OptionParser(usage="Usage: %prog [options] logdir", description=DESC)
@@ -38,10 +37,7 @@ if __name__ == "__main__":
         bots.append({'type': VariableAggressionPlayer, 'params': {'conservativeness': i/50., 'id': botid}})
         botid += 1
       
-    subjects = []
-    for i in [True, False]:
-        subjects.append({'type': PredictingPlayer, 'params': {'scout_enabled': i, 'id': botid}})
-        botid += 1
+    subjects = [{'type': Dave2Player, 'params': {'id': botid}}]
     
     maps = []
     for i in range(100):

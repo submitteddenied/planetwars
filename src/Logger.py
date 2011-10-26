@@ -20,23 +20,19 @@ class Logger(object):
         self.turns = []
         self.player1 = []
         self.player2 = []
+        self.log_data = []
         
     def flush(self):
-        res = open(self.pattern % 'results', 'w')
-        res.writelines(self.results)
-        res.close()
+        self.flush_file('results', self.results)
+        self.flush_file('turns', self.turns)
+        self.flush_file('player1', self.player1)
+        self.flush_file('player2', self.player2)
+        self.flush_file('data', self.log_data)
         
-        turns = open(self.pattern % 'turns', 'w')
-        turns.writelines(self.turns)
-        turns.close()
-        
-        p1file = open(self.pattern % 'player1', 'w')
-        p1file.writelines(self.player1)
-        p1file.close()
-        
-        p2file = open(self.pattern % 'player2', 'w')
-        p2file.writelines(self.player2)
-        p2file.close()
+    def flush_file(self, filename, log):
+        temp_file = open(self.pattern % filename, 'w')
+        temp_file.writelines(log)
+        temp_file.close()
         
     def append_message(self, log, message):
         if message[-1] != "\n":
@@ -55,3 +51,6 @@ class Logger(object):
         
     def p2log(self, message):
         self.append_message(self.player2, message)
+        
+    def data(self, message):
+        self.append_message(self.log_data, message)

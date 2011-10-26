@@ -182,6 +182,8 @@ class PredictingPlayer(BasePlayer):
         sources = pw.MyPlanets()
         sources.sort(key=lambda p: p.DistanceTo(target))
         required = target.NumShips()
+        if required == 0:
+            required = 1
         plan = []
         for planet in sources:
             if planet.NumShips() < self.MIN_SHIPS:

@@ -19,9 +19,9 @@ class Dave2Player(BasePlayer):
     Still no scouting
     '''
     
-    def __init__(self):
+    def __init__(self, id):
         #Default constructor.
-        super(Dave2Player, self).__init__()
+        super(Dave2Player, self).__init__(id)
         
         #Initialisation
         self.myCore = Location(0,0)

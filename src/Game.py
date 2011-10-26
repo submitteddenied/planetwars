@@ -183,15 +183,15 @@ def do_game(game_id, logger, p1, p2, pw, show_gui=False, max_game_length=500):
             p2Proxy._Update(pw)
     if p1Proxy.TotalShips() == p2Proxy.TotalShips():
         #tie
-        winner = "tie"
+        winner = "no"
     elif p1Proxy.TotalShips() > p2Proxy.TotalShips():
         #p1 wins!
-        winner = "%s victory" % p1.id
+        winner = p1.id
     else:
         #p2 wins!
-        winner = "%s victory" % p2.id
+        winner = p2.id
     
-    logger.result("Game {0}: {1} at turn {2} - {3}: {4}, {5}: {6}".format(
+    logger.result("Game {0}: {1} victory at turn {2} - {3}: {4}, {5}: {6}".format(
                     game_id,
                     winner,
                     pw.CurrentTick(),
@@ -199,6 +199,14 @@ def do_game(game_id, logger, p1, p2, pw, show_gui=False, max_game_length=500):
                     p1Proxy.TotalShips(),
                     p2.id,
                     p2Proxy.TotalShips()))
+    logger.data("{0}:{1}:{2}:{3}:{4},{5}:{6},{7}".format(game_id,
+                                                     pw._gameid,
+                                                     winner, 
+                                                     pw.CurrentTick(),
+                                                     p1.id,
+                                                     p1Proxy.TotalShips(),
+                                                     p2.id,
+                                                     p2Proxy.TotalShips()))
     
 
 from Logger import Logger
@@ -212,10 +220,10 @@ if __name__ == '__main__':
         pass
     try:
         #import the two players
-        from Players.Dave2Player import Dave2Player
-        from Players.BasicPlayer import BasicPlayer
-        bot1 = Dave2Player() #your player!
-        bot2 = BasicPlayer()
+        from Players.VariableAggressionPlayer import VariableAggressionPlayer
+        from Players.PredictingPlayer import PredictingPlayer
+        bot1 = PredictingPlayer() #your player!
+        bot2 = VariableAggressionPlayer(0.08)
         
         pw = PlanetWars(open(sys.argv[1]).read(), logger=log.turn)
         do_game(1, log, bot1, bot2, pw, show_gui=True)
